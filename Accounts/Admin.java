@@ -12,23 +12,145 @@ public class Admin extends employee{
 		
 	}
 	
-	public void revupthosefryers()
+	public void Log(String log)
 	{
-		System.out.println("welcome admin what are we going to do?");
-		System.out.println("Log(L), Deposit(D), Withdraw(W), Delete Account(A)");
-		System.out.println("Transfer Funds(T), Make Employee(E), Show Users(S)");
-		
+		try(FileWriter f = new FileWriter("src/logs/accounts.txt/", true); 
+				BufferedWriter b = new BufferedWriter(f); 
+				PrintWriter p = new PrintWriter(b);)
+		{
+			p.println(log);
+		} 
+		catch (IOException e) {e.printStackTrace();}
 	}
-	public void Log(int AccNumber) {}
-	public void Deposit(int AccNumber, double Amount) {}
-	public void Withdraw(int AccNumber, double Amount) {}
+	public void Deposit(int AccNumber, double Amount) 
+	{
+	if(Amount < 0){System.out.println("stop trying to enter negatives, jerk"); return;}
+			
+			String replace = "";
+			String[] ReplaceItems;
+			try (BufferedReader FindAcc = new BufferedReader(new FileReader("src/logs/accounts.txt/")))
+			{	
+				String line = FindAcc.readLine();
+			
+				while(line!=null)
+				{
+					String fields[] = line.split(",");
+					
+					if(Integer.parseInt(fields[fields.length-1]) == AccNumber)
+					{
+						ReplaceItems = line.split(",");
+						ReplaceItems[ReplaceItems.length-1] = (""+Amount);
+				
+						if(Amount + Double.parseDouble(ReplaceItems[ReplaceItems.length-1]) >= 0)
+						{
+							ReplaceItems[ReplaceItems.length-1] = 
+									(" " + (Amount - Double.parseDouble(ReplaceItems[ReplaceItems.length-1])));
+						}
+						
+						for(int i = 0; i < ReplaceItems.length;i++)
+						{
+							replace += ReplaceItems[1];
+						}
+					}
+	
+					line = FindAcc.readLine();
+				}
+				if (replace != null)
+				{
+					
+					System.out.println(replace);
+					Log(replace);
+				}
+			
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	public void Withdraw(int AccNumber, double Amount)
+	{
+		if(Amount < 0){System.out.println("stop trying to enter negatives, jerk"); return;}
+		
+		String replace = "";
+		String[] ReplaceItems;
+		try (BufferedReader FindAcc = new BufferedReader(new FileReader("src/logs/accounts.txt/")))
+		{	
+			String line = FindAcc.readLine();
+		
+			while(line!=null)
+			{
+				String fields[] = line.split(",");
+				
+				if(Integer.parseInt(fields[fields.length-1]) == AccNumber)
+				{
+					ReplaceItems = line.split(",");
+					ReplaceItems[ReplaceItems.length-1] = (""+Amount);
+			
+					if(Amount - Double.parseDouble(ReplaceItems[ReplaceItems.length-1]) >= 0)
+					{
+						ReplaceItems[ReplaceItems.length-1] = 
+								(" " + (Amount - Double.parseDouble(ReplaceItems[ReplaceItems.length-1])));
+					}
+					
+					for(int i = 0; i < ReplaceItems.length;i++)
+					{
+						replace += ReplaceItems[1];
+					}
+				}
+
+				line = FindAcc.readLine();
+			}
+			if (replace != null)
+			{
+				
+				System.out.println(replace);
+				Log(replace);
+			}
+		}
+	catch(FileNotFoundException e) {e.printStackTrace();}
+	catch (IOException e) {e.printStackTrace();}
+	}
+	
 	public boolean Validate(int AccNumber) {return true;}
+	
 	public void DeleteAccount(int AccNumber) 
 	{
+		/*
+		 * When we are checking lines, write the line right after reading it
+		 * unless it contains the account number that we are looking for
+		 * if it does, just read the next line, effectively deleting the 
+		 * item by not printing it when we were supposed to.
+		 * */
 		
+		try (BufferedReader FindAcc = new BufferedReader(new FileReader("src/logs/accounts.txt/")))
+		{	
+			String ReplaceItems[];
+			String line = FindAcc.readLine();
 		
+			while(line!=null)
+			{
+				ReplaceItems = line.split(",");
+				
+				if(Integer.parseInt(ReplaceItems[ReplaceItems.length-1]) == AccNumber)
+				{
+					
+				}
+				else
+				{
+					System.out.println(line);
+				}
+				line = FindAcc.readLine();
+			}
+
+			} catch (FileNotFoundException e) {e.printStackTrace();
+			} catch (IOException e) {e.printStackTrace();}
+		} 
 		
-	}
+	
 	
 	public void TransferFunds(int UserID1, int UserID2, double amount)
 	{

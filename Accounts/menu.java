@@ -25,9 +25,13 @@ public class menu {
 						+ ":: M to make employees");
 				
 			}
-			if(S.equals("pending"))
+			if(S.equals("pending") && Valid == false)
 			{
 				System.out.println("you are not approved yet.");
+			}
+			else
+			{
+				System.out.println("invalid user");
 			}
 			
 			System.out.print("quit to quit the program and log out: ");

@@ -1,9 +1,7 @@
 package Accounts;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,7 +26,7 @@ public class Account {
 		
 		String choice = "";
 		
-		if (log == true &&  logon(User,Pass))
+		if (log == true && logon(User,Pass))
 		{
 			
 			
@@ -126,22 +124,32 @@ public class Account {
 	public void Deposit() 
 	{
 		System.out.println("how much would you like to deposit? :");
-		Scanner S1 = new Scanner(System.in);
-		double amount  = Double.parseDouble(S1.next());
-		if(amount>=0) 
+		try (BufferedReader Reader = new BufferedReader(new FileReader("src/logs/accounts.txt/")))
 		{
-			this.Amount+=amount;
-			WriteLocal();
-		}
-		else
-		{
-			System.out.println("must add a number >=0");
+			@SuppressWarnings("resource")
+			Scanner S1 = new Scanner(System.in);
+			double Amount = S1.nextDouble();
+			if(Amount>=0) 
+			{
+				
+				
+				this.Amount+=Amount;
+				WriteLocal();
+			}
+			else
+			{
+				System.out.println("must add a number >=0");
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
 	public void Deposit(double Amount, String Username, int AccountNumber)
 	{
-		try (BufferedReader Reader = new BufferedReader(new FileReader("file.txt"))){
+		try (BufferedReader Reader = new BufferedReader(new FileReader("src/logs/accounts.txt/"))){
 			
 			String line = Reader.readLine();
 			
